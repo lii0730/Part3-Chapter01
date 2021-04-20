@@ -22,35 +22,30 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onNewToken(token)
         Log.i(Tag, "new Token: $token")
 
+        //TODO: 서버에 토큰 갱신 처리 작업 해주어야함 라이브 서비스에서는
     }
 
 
-    //TODO: 앱이 실행중이고, Firebase가 앱에 메시지를 보낼 떄 호출출
+    //TODO: 앱이 실행중이고, Firebase가 앱에 메시지를 보낼 떄 호출
+    //TODO: Data메시지는 백그라운드, 포어그라운드에 상관없이 호출됨
    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
         Log.i(Tag, "Notification Message Body: " + remoteMessage.notification?.body)
         Log.i(Tag, "Notification Message Title: " + remoteMessage.notification?.title)
         Log.i(Tag, "Notification Message id: " + remoteMessage.notification?.channelId)
 
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra("title", remoteMessage.notification?.title)
-            putExtra("body", remoteMessage.notification?.body)
-        }
-        startActivity(intent)
-
         createNotificationChannel()
 
-        val type = remoteMessage.data["id"]?.let {
+        val type = remoteMessage.data["type"]?.let {
             NotificationType.valueOf(it)
         }
-
-
-        val title = remoteMessage.notification?.title
-        val message = remoteMessage.notification?.body
+        val title = remoteMessage.data["title"]
+        val message = remoteMessage.data["message"]
 
         type ?: return
 
-        NotificationManagerCompat.from(this).notify(type.id, createNotification(type, title, message))
+        NotificationManagerCompat.from(this)
+                .notify(type.id, createNotification(type, title, message))
     }
 
 
@@ -86,7 +81,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
 
         when(type) {
-            NotificationType.NORMAL -> Unit
+            NotificationType.NORMAL -> Unit //TODO: 할일 없음
             NotificationType.EXPANDABLE -> {
                 notificationBuilder.setStyle(
                     NotificationCompat.BigTextStyle()

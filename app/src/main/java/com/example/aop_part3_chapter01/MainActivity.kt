@@ -2,7 +2,6 @@ package com.example.aop_part3_chapter01
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
@@ -22,13 +21,9 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.tokenTextView)
     }
 
-    private var mFirebaseAnalytics: FirebaseAnalytics? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         getToken()
         updateResult()
