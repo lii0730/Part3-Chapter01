@@ -1,5 +1,6 @@
 package com.example.aop_part3_chapter01
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateResult(isNewIntent: Boolean = false) {
         resultTextView.text = (intent.getStringExtra("notificationType") ?: "앱 런처") +
                 if (isNewIntent) {

@@ -67,12 +67,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         title: String?,
         message: String?
     ): Notification {
-
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra("notificationType", "${type.title} 타입")
+         //TODO: flag 는?
+            // SingleTop -> Top에 한개만! 기존 화면 갱신을 위해서!
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
+        //FLAG_UPDATE_CURRENT -> 현재거를 Update?
+        // id = 0 flag = 0으로 해보기
         val pendingIntent = PendingIntent.getActivity(this, type.id, intent, FLAG_UPDATE_CURRENT)
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_baseline_notifications_24)
