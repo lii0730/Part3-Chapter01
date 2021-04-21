@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/soccerMatchTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        tools:text="대한민국 vs 스페인"/>
+    <TextView
+        android:id="@+id/soccerMatchBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        tools:text="대한민국 vs 스페인"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/koreaFlag"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginRight="40dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/korea_flag"/>
+
+        <ImageView
+            android:id="@+id/spainFlag"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="40dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/spain_flag"/>
+
+    </LinearLayout>
+
+</LinearLayout>

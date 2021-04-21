@@ -2,10 +2,10 @@ package com.example.aop_part3_chapter01
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.messaging.FirebaseMessaging
 
 
@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        //TODO: 화면에서 동일한 화면을 부를때 A Activity에서 A Activity를 또 호출할 떄 onNewIntent 호출
 
         setIntent(intent)
         updateResult(true)
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (task.isSuccessful) {
                 tokenTextView.text = task.result
+                Log.i(Tag, task.result.toString())
             }
         })
     }

@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
@@ -28,15 +29,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     //TODO: 앱이 실행중이고, Firebase가 앱에 메시지를 보낼 떄 호출
     //TODO: Data메시지는 백그라운드, 포어그라운드에 상관없이 호출됨
-   override fun onMessageReceived(remoteMessage: RemoteMessage) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        Log.i(Tag, "Notification Message Body: " + remoteMessage.notification?.body)
-        Log.i(Tag, "Notification Message Title: " + remoteMessage.notification?.title)
-        Log.i(Tag, "Notification Message id: " + remoteMessage.notification?.channelId)
 
         createNotificationChannel()
 
-        val type = remoteMessage.data["type"]?.let {
+        val type = remoteMessage.data["type"]?.toUpperCase()?.let {
             NotificationType.valueOf(it)
         }
         val title = remoteMessage.data["title"]
@@ -45,7 +43,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         type ?: return
 
         NotificationManagerCompat.from(this)
-                .notify(type.id, createNotification(type, title, message))
+            .notify(type.id, createNotification(type, title, message))
     }
 
 
@@ -55,8 +53,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 CHANNEL_ID,
                 CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_DEFAULT
-            )
-            val notificationManager = (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
+            ).apply {
+                description = CHANNEL_DESCRIPTION
+            }
+            val notificationManager: NotificationManager =
+                (getSystemService(NOTIFICATION_SERVICE) as NotificationManager)
             notificationManager.createNotificationChannel(channel)
         }
     }
@@ -65,37 +66,40 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         type: NotificationType,
         title: String?,
         message: String?
-    ):Notification {
+    ): Notification {
+
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra("notificationType", "${type.title} 타입")
             addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
 
         val pendingIntent = PendingIntent.getActivity(this, type.id, intent, FLAG_UPDATE_CURRENT)
-        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_baseline_notifications_24)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
+        val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
+            setSmallIcon(R.drawable.ic_baseline_notifications_24)
+            setContentTitle(title)
+            setContentText(message)
+            setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            setContentIntent(pendingIntent)
+            setAutoCancel(true) // 알림을 탭하면 자동 삭제
+        }
 
-        when(type) {
+        when (type) {
             NotificationType.NORMAL -> Unit //TODO: 할일 없음
             NotificationType.EXPANDABLE -> {
-                notificationBuilder.setStyle(
-                    NotificationCompat.BigTextStyle()
-                        .bigText(
-                            "😀 😃 😄 😁 😆 😅 😂 🤣 🥲 ☺️ 😊 😇 " +
-                                    "🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 " +
-                                    "😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 " +
-                                    "😞 😔 😟 😕 🙁 ☹ 😣 😖 😫 😩 🥺 😢 " +
-                                    "😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 " +
-                                    "😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 " +
-                                    "😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 " +
-                                    "🤢 🤮 🤧 😷 🤒 🤕"
-                        )
-                )
+                notificationBuilder
+                    .setStyle(
+                        NotificationCompat.BigTextStyle()
+                            .bigText(
+                                "😀 😃 😄 😁 😆 😅 😂 🤣 🥲 ☺️ 😊 😇 " +
+                                        "🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 " +
+                                        "😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 " +
+                                        "😞 😔 😟 😕 🙁 ☹ 😣 😖 😫 😩 🥺 😢 " +
+                                        "😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 " +
+                                        "😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 " +
+                                        "😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 " +
+                                        "🤢 🤮 🤧 😷 🤒 🤕"
+                            )
+                    )
             }
             NotificationType.CUSTOM -> {
                 notificationBuilder
@@ -104,9 +108,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         RemoteViews(
                             packageName,
                             R.layout.view_custom_notification
-                        ). apply {
+                        ).apply {
                             setTextViewText(R.id.title, title)
                             setTextViewText(R.id.message, message)
+                        }
+                    )
+            }
+
+            NotificationType.SOCCER -> {
+                notificationBuilder
+                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                    .setCustomContentView(
+                        RemoteViews(
+                            packageName,
+                            R.layout.soccer_match_custom_layout
+                        ).apply {
+                            setTextViewText(R.id.soccerMatchTitle, title)
+                            setTextViewText(R.id.soccerMatchBody, message)
                         }
                     )
             }
@@ -118,6 +136,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     companion object {
         private const val CHANNEL_ID = "Channel1"
         private const val CHANNEL_NAME = "My Test Channel"
+        private const val CHANNEL_DESCRIPTION = "테스트 채널입니다."
     }
 
 }

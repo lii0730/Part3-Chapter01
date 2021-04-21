@@ -55,6 +55,7 @@
         android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:padding="5dp"
         android:text="Firebase 토큰입니다."
         android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
