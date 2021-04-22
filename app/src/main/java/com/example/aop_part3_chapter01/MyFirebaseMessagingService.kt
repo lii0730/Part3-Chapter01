@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
@@ -77,6 +76,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         //FLAG_UPDATE_CURRENT -> 현재거를 Update?
         // id = 0 flag = 0으로 해보기
         val pendingIntent = PendingIntent.getActivity(this, type.id, intent, FLAG_UPDATE_CURRENT)
+//        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
         val notificationBuilder = NotificationCompat.Builder(this, CHANNEL_ID).apply {
             setSmallIcon(R.drawable.ic_baseline_notifications_24)
             setContentTitle(title)
@@ -93,14 +93,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     .setStyle(
                         NotificationCompat.BigTextStyle()
                             .bigText(
-                                "😀 😃 😄 😁 😆 😅 😂 🤣 🥲 ☺️ 😊 😇 " +
-                                        "🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 " +
-                                        "😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 " +
-                                        "😞 😔 😟 😕 🙁 ☹ 😣 😖 😫 😩 🥺 😢 " +
-                                        "😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 " +
-                                        "😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 " +
-                                        "😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 " +
-                                        "🤢 🤮 🤧 😷 🤒 🤕"
+                                getString(R.string.ExpandableNotificationMessage)
                             )
                     )
             }

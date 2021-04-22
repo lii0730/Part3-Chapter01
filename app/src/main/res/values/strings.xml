@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">AOP-Part3-Chapter01</string>
+    <string name="ExpandableNotificationMessage">"😀 😃 😄 😁 😆 😅 😂 🤣 🥲 ☺️ 😊 😇 " +
+                                        "🙂 🙃 😉 😌 😍 🥰 😘 😗 😙 😚 😋 😛 " +
+                                        "😝 😜 🤪 🤨 🧐 🤓 😎 🥸 🤩 🥳 😏 😒 " +
+                                        "😞 😔 😟 😕 🙁 ☹ 😣 😖 😫 😩 🥺 😢 " +
+                                        "😭 😤 😠 😡 🤬 🤯 😳 🥵 🥶 😱 😨 😰 " +
+                                        "😥 😓 🤗 🤔 🤭 🤫 🤥 😶 😐 😑 😬 🙄 " +
+                                        "😯 😦 😧 😮 😲 🥱 😴 🤤 😪 😵 🤐 🥴 " +
+                                        "🤢 🤮 🤧 😷 🤒 🤕"</string>
 </resources>
